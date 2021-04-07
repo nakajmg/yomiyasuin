@@ -87,9 +87,9 @@ export const Preview = styled(Component)`
   .preview {
     width: 100%;
     height: 100%;
-    padding: 4px;
     box-sizing: border-box;
-    background-color: #efefef;
+    border: 4px solid #efefef;
+    overflow: auto;
   }
   .hidden {
     display: none;

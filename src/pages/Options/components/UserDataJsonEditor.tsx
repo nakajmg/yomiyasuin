@@ -36,7 +36,8 @@ const Component = ({ className }: Props) => {
 
 export const UserDataJsonEditor = styled(Component)`
   display: grid;
-  grid-template-rows: min(400px) 50px;
+  grid-template-rows: 1fr 1em;
+  height: 100%;
   textarea {
     width: 100%;
     height: 100%;

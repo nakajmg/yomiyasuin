@@ -12,7 +12,6 @@ const Component = ({ className }: Props) => {
 
   return (
     <div className={className}>
-      <h2>User Data</h2>
       <div className="grids">
         <section>
           {state.userData.length ? (
@@ -75,10 +74,13 @@ const Component = ({ className }: Props) => {
 
 export const UserDataEditor = styled(Component)`
   margin: 0 auto;
+  width: 100%;
+  flex-grow: 1;
   .grids {
     display: grid;
     grid-template-columns: min(500px) 1fr;
     grid-gap: 16px;
+    height: 100%;
   }
   .item {
     display: grid;

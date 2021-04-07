@@ -2,6 +2,7 @@ import React from 'react';
 import { UserDataEditor } from './components/UserDataEditor';
 import styled from '@emotion/styled';
 import { StorageContextProvider } from '../modules/StorageContext';
+import './index.css';
 
 const Component: React.FC<{ className?: string }> = ({ className }) => {
   return (
@@ -15,7 +16,14 @@ const Component: React.FC<{ className?: string }> = ({ className }) => {
 };
 
 export default styled(Component)`
-  padding: 0 16px 16px 16px;
+  height: 100vh;
+  padding: 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  h1 {
+    margin-top: 0;
+  }
   hr {
     margin-top: 16px;
     border-color: #fefefe;
