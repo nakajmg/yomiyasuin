@@ -4,15 +4,49 @@ import ReactDom from 'react-dom';
 import { App } from './components/App';
 import { StorageContextProvider } from '../modules/StorageContext';
 
+const containerId = 'yomiyasuin-container';
+
+const editorSelector = '[g_editable="true"]';
+
+let pasteTarget: HTMLElement | Element | null;
+
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   switch (message.type) {
     case EVENT_TYPES.POPUP_CLICKED:
       render();
       break;
+    case EVENT_TYPES.PASTE_HTML:
+      console.log('fire paste');
+      navigator.clipboard.readText().then((clipText) => {
+        pasteAsHTML(clipText);
+      });
+      break;
   }
 });
 
-const containerId = 'yomiyasuin-container';
+const pasteAsHTML = (clipText: string) => {
+  if (!pasteTarget) return;
+  const isEditable = pasteTarget.getAttribute('contenteditable');
+  if (!isEditable) return;
+  pasteTarget.innerHTML += clipText;
+};
+
+document.body.addEventListener(
+  'click',
+  function (e) {
+    // @ts-ignore
+    const targetEl = e.target as HTMLElement;
+    if (targetEl.matches(editorSelector)) {
+      pasteTarget = targetEl;
+      return;
+    }
+    const parentEl = targetEl.closest(editorSelector);
+    if (parentEl) {
+      pasteTarget = parentEl;
+    }
+  },
+  false
+);
 
 function render() {
   const $container =

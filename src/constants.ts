@@ -1,5 +1,6 @@
 export const EVENT_TYPES = {
   POPUP_CLICKED: 'POPUP_CLICKED',
+  PASTE_HTML: 'PASTE_HTML',
 };
 
 export const DEFAULT_ICON =
