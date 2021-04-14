@@ -3,12 +3,15 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import { App } from './components/App';
 import { StorageContextProvider } from '../modules/StorageContext';
+import { PasteDialog } from './components/PasteDialog';
 
 const containerId = 'yomiyasuin-container';
 
 const editorSelector = '[g_editable="true"]';
 
-let pasteTarget: HTMLElement | Element | null;
+export type PasteTarget = HTMLElement | Element | null;
+
+let pasteTarget: PasteTarget;
 
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   switch (message.type) {
@@ -16,37 +19,44 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
       render();
       break;
     case EVENT_TYPES.PASTE_HTML:
-      console.log('fire paste');
-      navigator.clipboard.readText().then((clipText) => {
-        pasteAsHTML(clipText);
-      });
+      renderPasteDialog();
       break;
   }
 });
 
-const pasteAsHTML = (clipText: string) => {
-  if (!pasteTarget) return;
-  const isEditable = pasteTarget.getAttribute('contenteditable');
-  if (!isEditable) return;
-  pasteTarget.innerHTML += clipText;
+const handleTargetClicked = (e: MouseEvent) => {
+  // @ts-ignore
+  const targetEl = e.target as HTMLElement;
+  if (targetEl.matches(editorSelector)) {
+    pasteTarget = targetEl;
+    return;
+  }
+  const parentEl = targetEl.closest(editorSelector);
+  if (parentEl) {
+    pasteTarget = parentEl;
+  }
 };
 
-document.body.addEventListener(
-  'click',
-  function (e) {
-    // @ts-ignore
-    const targetEl = e.target as HTMLElement;
-    if (targetEl.matches(editorSelector)) {
-      pasteTarget = targetEl;
-      return;
-    }
-    const parentEl = targetEl.closest(editorSelector);
-    if (parentEl) {
-      pasteTarget = parentEl;
-    }
-  },
-  false
-);
+document.body.addEventListener('contextmenu', handleTargetClicked, false);
+
+function renderPasteDialog() {
+  if (!pasteTarget) {
+    alert('Please click editable area to paste.');
+    return;
+  }
+  const $container = document.createElement('div');
+  $container.setAttribute('id', 'yomiyasuin-paste-dialog');
+  document.body.appendChild($container);
+
+  const closePasteDialog = () => {
+    ReactDom.unmountComponentAtNode($container);
+  };
+
+  ReactDom.render(
+    <PasteDialog pasteTarget={pasteTarget} handleClose={closePasteDialog} />,
+    $container
+  );
+}
 
 function render() {
   const $container =

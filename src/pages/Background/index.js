@@ -9,15 +9,14 @@ chrome.action.onClicked.addListener((tab) => {
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
     id: 'pasteHtml',
-    title: 'paste as HTML',
+    title: 'Paste as HTML',
     type: 'normal',
-    contexts: ['all'],
+    contexts: ['editable'],
   });
+});
 
-  chrome.contextMenus.onClicked.addListener((item) => {
-    console.log(item);
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-      chrome.tabs.sendMessage(tabs[0].id, { type: EVENT_TYPES.PASTE_HTML });
-    });
+chrome.contextMenus.onClicked.addListener((item) => {
+  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    chrome.tabs.sendMessage(tabs[0].id, { type: EVENT_TYPES.PASTE_HTML });
   });
 });
