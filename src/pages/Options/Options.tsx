@@ -8,9 +8,8 @@ const Component: React.FC<{ className?: string }> = ({ className }) => {
   return (
     <StorageContextProvider>
       <div className={className}>
-
         <h1>
-          <img src="/icon-128.png" width="22" height="22" alt="Y"/>
+          <span className="y-y">Y</span>
           OMIYASUIN
         </h1>
         <UserDataEditor />
@@ -39,5 +38,13 @@ export default styled(Component)`
     margin-top: 16px;
     border-color: #fefefe;
     border-bottom: none;
+  }
+  .y-y {
+    background-color: rgb(255, 204, 0);
+    color: #000;
+    width: 25px;
+    text-align: center;
+    padding-left: 3px;
+    margin-right: 3px;
   }
 `;

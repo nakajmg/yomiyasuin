@@ -40,7 +40,6 @@ export const UserDataJsonEditor = styled(Component)`
   height: 100%;
   textarea {
     width: 100%;
-    height: 100%;
     box-sizing: border-box;
   }
   .error {

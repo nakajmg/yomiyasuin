@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import { convert } from '../../modules/convert';
 import { useStorageContext } from '../../modules/StorageContext';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCog } from '@fortawesome/free-solid-svg-icons';
 
 type Props = {
   className?: string;
@@ -19,6 +21,10 @@ const Component = ({ className, src }: Props) => {
     setIsOutputVisible(false);
   };
 
+  const handleClickOptions = () => {
+    chrome.runtime.sendMessage({ type: 'openOptions' });
+  };
+
   const __html = convert({ src, userData: state.userData });
   const selectAll = (e: React.MouseEvent<HTMLTextAreaElement, MouseEvent>) => {
     const el = e.target as HTMLTextAreaElement;
@@ -31,14 +37,24 @@ const Component = ({ className, src }: Props) => {
         <button
           className={isOutputVisible ? '' : 'active'}
           onClick={hideOutput}
+          aria-label="show preview"
         >
           Preview
         </button>
         <button
           className={isOutputVisible ? 'active' : ''}
           onClick={showOutput}
+          aria-label="show output"
         >
           Output
+        </button>
+        <button
+          title="open options page"
+          aria-label="open options page"
+          onClick={handleClickOptions}
+          className="y-options-link"
+        >
+          <FontAwesomeIcon icon={faCog} />
         </button>
       </h2>
       <div
@@ -67,6 +83,7 @@ export const Preview = styled(Component)`
     font-size: 14px !important;
     margin-top: 0;
     margin-bottom: 4px;
+    display: flex;
     button {
       color: #3498db;
       font-size: 12px !important;
@@ -102,5 +119,12 @@ export const Preview = styled(Component)`
     box-sizing: border-box;
     background-color: #efefef;
     border: none;
+  }
+  .y-options-link {
+    margin-left: auto;
+    margin-right: 4px;
+    border: none;
+    background-color: transparent;
+    font-size: 16px !important;
   }
 `;

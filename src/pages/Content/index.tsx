@@ -39,6 +39,11 @@ const handleTargetClicked = (e: MouseEvent) => {
 
 document.body.addEventListener('contextmenu', handleTargetClicked, false);
 
+function unmount($container: Element) {
+  ReactDom.unmountComponentAtNode($container);
+  document.body.removeChild($container);
+}
+
 function renderPasteDialog() {
   if (!pasteTarget) {
     alert('Please click editable area to paste.');
@@ -48,12 +53,13 @@ function renderPasteDialog() {
   $container.setAttribute('id', 'yomiyasuin-paste-dialog');
   document.body.appendChild($container);
 
-  const closePasteDialog = () => {
-    ReactDom.unmountComponentAtNode($container);
-  };
-
   ReactDom.render(
-    <PasteDialog pasteTarget={pasteTarget} handleClose={closePasteDialog} />,
+    <PasteDialog
+      pasteTarget={pasteTarget}
+      handleClose={() => {
+        unmount($container);
+      }}
+    />,
     $container
   );
 }
@@ -61,16 +67,17 @@ function renderPasteDialog() {
 function render() {
   const $container =
     document.querySelector(`#${containerId}`) || document.createElement('div');
+
   if ($container.getAttribute('id') === containerId) {
-    ReactDom.unmountComponentAtNode($container);
-    $container.removeAttribute('id');
+    unmount($container);
     return;
   }
+  
   $container.setAttribute('id', containerId);
   document.body.appendChild($container);
   ReactDom.render(
     <StorageContextProvider>
-      <App />
+      <App handleClose={() => unmount($container)} />
     </StorageContextProvider>,
     $container
   );

@@ -20,3 +20,11 @@ chrome.contextMenus.onClicked.addListener((item) => {
     chrome.tabs.sendMessage(tabs[0].id, { type: EVENT_TYPES.PASTE_HTML });
   });
 });
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  switch (message.type) {
+    case 'openOptions':
+      chrome.tabs.create({ url: chrome.runtime.getURL('options.html') });
+      break;
+  }
+});

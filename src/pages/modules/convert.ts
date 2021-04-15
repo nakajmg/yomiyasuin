@@ -35,7 +35,7 @@ export const convert = ({ src, userData }: ConvertProps) => {
     mapData.set(name, { name, id });
   });
 
-  const html = `<table style="background-color:#fff;border-collapse:separate;border-spacing:8px 12px;"><tbody>${lines
+  const html = `<table style="background-color:#fff;border-collapse:separate;border-spacing:8px 12px;width:100%;box-sizing:border-box;"><tbody>${lines
     .map((line, index) => {
       const [name, selif] = line.split('：');
       const icon = mapData.get(name)?.id
